@@ -13,6 +13,7 @@ import (
 )
 
 var path string
+var filename string
 
 var Fetch = cli.Command{
 	Name:    "fetch",
@@ -24,6 +25,12 @@ var Fetch = cli.Command{
 			Required:    true,
 			Destination: &path,
 			Usage:       "used to point to a target directory where the json is saved",
+		},
+		&cli.StringFlag{
+			Name:        "filename",
+			Required:    true,
+			Destination: &filename,
+			Usage:       "used to name the json file",
 		},
 	},
 	Action: func(context *cli.Context) error {
@@ -66,13 +73,13 @@ var Fetch = cli.Command{
 			return err
 		}
 
-		err = ioutil.WriteFile(path, file, 0644)
+		err = ioutil.WriteFile(path+filename, file, 0644)
 
 		if err != nil {
 			return err
 		}
 
-		fmt.Println(fmt.Sprintf("Done fetching monster data. Saved file to: %s", path))
+		fmt.Println(fmt.Sprintf("Done fetching monster data. Saved file to: %s%s", path, filename))
 
 		return nil
 	},
